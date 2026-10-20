@@ -1,10 +1,11 @@
 /* ==========================================================================
    TASKFLOW DESIGN SYSTEM & TOKENS
    Strict 3-Color Cohesive System: Slate Neutral, Indigo Accent, Emerald Status
+   Fully Adaptive Light & Dark Theming Across Desktop & Mobile Viewports
    ========================================================================== */
 
 :root {
-  /* 1. NEUTRAL BASE (SLATE MONOCHROME) */
+  /* 1. NEUTRAL BASE (SLATE MONOCHROME - LIGHT MODE) */
   --bg: #f1f5f9;
   --surface: #ffffff;
   --surface-2: #f8fafc;
@@ -16,12 +17,13 @@
   --text-muted: #64748b;
   --text-dim: #94a3b8;
 
-  --panel: #0f172a;
-  --panel-surface: rgba(255, 255, 255, 0.05);
-  --panel-surface-hover: rgba(255, 255, 255, 0.1);
-  --panel-text: #f8fafc;
-  --panel-muted: #94a3b8;
-  --panel-line: rgba(255, 255, 255, 0.08);
+  /* Left Panel / Mobile Top Header (Adaptive Light Theme) */
+  --panel: #ffffff;
+  --panel-surface: #f8fafc;
+  --panel-surface-hover: #f1f5f9;
+  --panel-text: #0f172a;
+  --panel-muted: #64748b;
+  --panel-line: #e2e8f0;
 
   /* 2. PRIMARY ACCENT (ELECTRIC INDIGO) */
   --accent: #4f46e5;
@@ -35,7 +37,7 @@
   --done-hover: #059669;
   --done-soft: rgba(16, 185, 129, 0.12);
 
-  /* System Functional Accent (Danger) */
+  /* Functional Accent */
   --danger: #e11d48;
   --danger-soft: rgba(225, 29, 72, 0.08);
 
@@ -60,7 +62,7 @@
 }
 
 :root[data-theme="dark"] {
-  /* 1. NEUTRAL BASE (DARK OBSIDIAN SLATE) */
+  /* 1. NEUTRAL BASE (DARK OBSIDIAN SLATE - DARK MODE) */
   --bg: #090d16;
   --surface: #111827;
   --surface-2: #162035;
@@ -72,12 +74,13 @@
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
-  --panel: #060913;
+  /* Left Panel / Mobile Top Header (Adaptive Dark Theme) */
+  --panel: #0b0f19;
   --panel-surface: rgba(255, 255, 255, 0.04);
   --panel-surface-hover: rgba(255, 255, 255, 0.08);
   --panel-text: #f8fafc;
   --panel-muted: #94a3b8;
-  --panel-line: rgba(255, 255, 255, 0.06);
+  --panel-line: rgba(255, 255, 255, 0.08);
 
   /* 2. PRIMARY ACCENT (ELECTRIC INDIGO / VIOLET) */
   --accent: #6366f1;
@@ -103,8 +106,7 @@
 }
 
 /* ==========================================================================
-   RESET & VIEWPORT LOCK
-   Full-screen application workstation: zero window scroll
+   BASE RESETS & VIEWPORT LOCK (DESKTOP)
    ========================================================================== */
 
 *, *::before, *::after {
@@ -112,11 +114,8 @@
 }
 
 html, body {
-  height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Complete screen, no window-level scroll */
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
@@ -127,9 +126,48 @@ html, body {
 }
 
 #root {
-  height: 100%;
   width: 100%;
-  overflow: hidden;
+}
+
+/* Desktop default: Full screen, locked outer viewport */
+@media (min-width: 861px) {
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+  .shell {
+    display: grid;
+    grid-template-columns: 350px minmax(0, 1fr);
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .panel {
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid var(--panel-line);
+  }
+  .main {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    padding: 24px 32px;
+  }
+  .list-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 2px 4px 12px 0;
+  }
 }
 
 button, input, select {
@@ -163,35 +201,18 @@ ul {
 }
 
 /* ==========================================================================
-   WORKSPACE SHELL LAYOUT
-   ========================================================================== */
-
-.shell {
-  display: grid;
-  grid-template-columns: 350px minmax(0, 1fr);
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background: var(--bg);
-}
-
-/* ==========================================================================
-   LEFT SIDEBAR (PANEL)
+   PANEL (SIDEBAR / TOP MOBILE HEADER)
+   Fully adaptive in both Light & Dark modes
    ========================================================================== */
 
 .panel {
-  height: 100vh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   padding: 24px 20px;
   background: var(--panel);
   color: var(--panel-text);
-  border-right: 1px solid var(--panel-line);
-  box-shadow: var(--shadow-md);
-  overflow-y: auto;
-  overflow-x: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   z-index: 20;
 }
 
@@ -217,7 +238,7 @@ ul {
   height: 34px;
   border-radius: 10px;
   background: var(--accent);
-  box-shadow: 0 0 16px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 16px rgba(79, 70, 229, 0.35);
   position: relative;
   display: grid;
   place-items: center;
@@ -230,6 +251,7 @@ ul {
   height: 12px;
   border-radius: 4px;
   background: var(--panel);
+  transition: background 0.2s ease;
 }
 
 .brand__text {
@@ -244,7 +266,8 @@ ul {
   font-weight: 800;
   font-size: 1.45rem;
   letter-spacing: -0.03em;
-  color: #ffffff;
+  color: var(--panel-text);
+  transition: color 0.2s ease;
 }
 
 .brand__badge {
@@ -252,14 +275,14 @@ ul {
   font-weight: 600;
   padding: 2px 6px;
   border-radius: var(--r-full);
-  background: var(--panel-surface-hover);
+  background: var(--panel-surface);
   color: var(--panel-muted);
   border: 1px solid var(--panel-line);
 }
 
 /* Progress Ring Container */
 .panel__ring-wrap {
-  padding: 20px 0 16px;
+  padding: 16px 0;
   display: grid;
   place-items: center;
 }
@@ -275,13 +298,14 @@ ul {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
-  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.2));
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.18));
 }
 
 .ring__track {
   fill: none;
   stroke: var(--panel-line);
   stroke-width: 9;
+  transition: stroke 0.2s ease;
 }
 
 .ring__bar {
@@ -289,7 +313,7 @@ ul {
   stroke: var(--done);
   stroke-width: 9;
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.2s ease;
 }
 
 .ring__label {
@@ -306,7 +330,8 @@ ul {
   font-size: 2.8rem;
   line-height: 1;
   letter-spacing: -0.04em;
-  color: #ffffff;
+  color: var(--panel-text);
+  transition: color 0.2s ease;
 }
 
 .ring__label small {
@@ -365,7 +390,7 @@ ul {
   background: var(--accent);
   color: var(--accent-ink);
   font-weight: 600;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
 }
 
 .count {
@@ -376,10 +401,14 @@ ul {
   font-size: 0.8rem;
   font-weight: 600;
   background: var(--panel-surface);
+  color: var(--panel-muted);
+  border: 1px solid var(--panel-line);
 }
 
 .status-btn.is-active .count {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: transparent;
 }
 
 /* User Filter Dropdown */
@@ -402,7 +431,7 @@ ul {
   color: var(--panel-text);
   font-size: 0.92rem;
   font-weight: 500;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .select select:focus {
@@ -445,14 +474,11 @@ ul {
    ========================================================================== */
 
 .main {
-  height: 100vh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: 24px 32px;
-  overflow: hidden;
   gap: 16px;
   background: var(--bg);
+  transition: background 0.2s ease;
 }
 
 .main__header {
@@ -472,7 +498,7 @@ ul {
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--line);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.2s ease;
 }
 
 .add:focus-within {
@@ -509,7 +535,7 @@ ul {
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   color: var(--text-muted);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.2s ease;
 }
 
 .search:focus-within {
@@ -539,16 +565,8 @@ ul {
 }
 
 /* ==========================================================================
-   SCROLLABLE TASK LIST CONTAINER
+   TASK LIST CONTAINER
    ========================================================================== */
-
-.list-wrap {
-  flex: 1;
-  min-height: 0; /* CRITICAL for flex item scrolling */
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 2px 4px 12px 0;
-}
 
 .list-wrap::-webkit-scrollbar {
   width: 6px;
@@ -580,7 +598,7 @@ ul {
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-xs);
-  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
 }
 
 .todo:hover {
@@ -592,7 +610,7 @@ ul {
 .todo.is-done {
   background: var(--surface-2);
   border-color: var(--line);
-  opacity: 0.78;
+  opacity: 0.8;
 }
 
 .todo__title {
@@ -638,12 +656,6 @@ ul {
 .todo:hover .todo__actions,
 .todo:focus-within .todo__actions {
   opacity: 1;
-}
-
-@media (hover: none) {
-  .todo__actions {
-    opacity: 1;
-  }
 }
 
 /* Checkbox (Status Emerald) */
@@ -844,6 +856,7 @@ ul {
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 700;
+  color: var(--text);
 }
 
 .state p {
@@ -887,34 +900,163 @@ ul {
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN (GRACEFUL RETREAT FOR SMALL SCREENS)
+   MOBILE & TABLET FLUID RESPONSIVE SYSTEM (< 860px)
+   Adapts both Light & Dark modes smoothly on mobile
    ========================================================================== */
 
 @media (max-width: 860px) {
   html, body {
-    overflow: auto;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #root {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
   }
 
   .shell {
-    grid-template-columns: 1fr;
-    height: auto;
-    overflow: visible;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
+  /* Compact Mobile Panel */
   .panel {
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--panel-line);
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 16px 16px 18px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--panel-line) !important;
+    gap: 14px !important;
   }
 
+  .brand {
+    padding-bottom: 12px !important;
+  }
+
+  /* Compact Ring on Mobile */
+  .panel__ring-wrap {
+    padding: 8px 0 !important;
+  }
+
+  .ring {
+    width: 128px !important;
+    height: 128px !important;
+  }
+
+  .ring__label strong {
+    font-size: 2.1rem !important;
+  }
+
+  .ring__label small {
+    font-size: 0.95rem !important;
+  }
+
+  .ring__label span {
+    font-size: 0.75rem !important;
+  }
+
+  /* Status Filters as Horizontal Scrollable Row on Mobile */
+  .panel__filters-wrap {
+    gap: 12px !important;
+  }
+
+  .filters {
+    gap: 12px !important;
+  }
+
+  .status-list {
+    flex-direction: row !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .status-btn {
+    flex: 1 0 auto !important;
+    padding: 8px 14px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important;
+  }
+
+  .panel__footer {
+    padding-top: 10px !important;
+  }
+
+  .panel__clear {
+    padding: 9px !important;
+    font-size: 0.84rem !important;
+  }
+
+  /* Mobile Main Workspace */
   .main {
-    height: auto;
-    overflow: visible;
-    padding: 20px 16px;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 16px 14px 40px !important;
+    gap: 14px !important;
+    flex: 1 !important;
   }
 
+  .add input,
+  .search input {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+
+  .add {
+    padding: 4px 4px 4px 14px !important;
+  }
+
+  .add .btn {
+    height: 38px !important;
+    padding: 0 14px !important;
+    font-size: 0.86rem !important;
+  }
+
+  .search {
+    height: 42px !important;
+  }
+
+  /* Task list naturally flows down the mobile viewport */
   .list-wrap {
-    overflow: visible;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .todo {
+    padding: 12px 14px !important;
+    gap: 12px !important;
+  }
+
+  /* Actions always visible on touch devices */
+  .todo__actions {
+    opacity: 1 !important;
+  }
+
+  .avatar {
+    display: none !important;
+  }
+
+  .main__footer {
+    padding-top: 16px !important;
+  }
+
+  .pagination {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
   }
 }
 
