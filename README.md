@@ -12,7 +12,7 @@
 - [Developer Quickstart & Local Setup](#developer-quickstart--local-setup)
 - [Project Architecture](#project-architecture)
 - [Testing & Quality Assurance](#testing--quality-assurance)
-- [License](#license)
+- [License](#-license)
 
 ---
 
@@ -166,7 +166,7 @@ npm test
 
 ---
 
-## License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).  
 Copyright © 2026 Muhammad Shoaib Kalim. All rights reserved.
